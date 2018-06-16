@@ -1,12 +1,9 @@
 module Rspec
   module Autoswagger
-    module DocPart
+    module Parts
       class Info
 
-        DEFAULT_INFO = YAML.load('./config/default_info.yml')
-
-        def initialize
-        end
+        DEFAULT_INFO = YAML.load_file(File.expand_path("../config/default_info.yml", __FILE__))
 
         def generate_hash
           DEFAULT_INFO

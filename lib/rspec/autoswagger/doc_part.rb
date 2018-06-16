@@ -1,6 +1,6 @@
-require 'rspec/autoswagger/doc_part/path'
-require 'rspec/autoswagger/doc_part/info'
-require 'rspec/autoswagger/doc_part/definition'
+require 'rspec/autoswagger/parts/path'
+require 'rspec/autoswagger/parts/info'
+require 'rspec/autoswagger/parts/definition'
 
 module Rspec
   module Autoswagger
@@ -14,16 +14,16 @@ module Rspec
       end
 
       def response_name
-        example.full_description
+        example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2].gsub(/\/|:/, '')
       end
 
       def create_path
-        path = Path.new(rspec_core_obj, example, response_name)
+        path = Parts::Path.new(rspec_core_obj, example, response_name)
         path.generate_hash
       end
 
       def create_definition
-        definition = Definition.new(rspec_core.response.body, response_name)
+        definition = Parts::Definition.new(rspec_core_obj.response.body, response_name)
         definition.generate_file
       end
     end

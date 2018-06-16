@@ -1,14 +1,10 @@
 require 'rspec/autoswagger/doc_part'
-
-module Rspec
-  module Autoswagger
+module Rspec module Autoswagger
     class DocParts
-      DEFAULT_INFO = default_info.yml
-      OUTPUT_PATH = './'
 
       attr_reader :specification, :info, :paths, :definitions
       def initialize
-        @info = DocPart::Info.new.generate_hash
+        @info = Parts::Info.new.generate_hash
         @paths = {}
         @definitions = {}
         @specification = {}
@@ -36,8 +32,8 @@ module Rspec
       private
 
       def aggregate_definitions
-        model_file_names = Dir.glob(Rails.root.to_s + "/tmp/specifications/Models/*")
-        response_file_names = Dir.glob(Rails.root.to_s + "/tmp/specifications/Responses/*")
+        model_file_names = Dir.glob(Parts::Definition::DEFAULT_PATH + "/Models/*")
+        response_file_names = Dir.glob(Parts::Definition::DEFAULT_PATH + "/Responses/*")
         model_file_names.each do |file_name|
           model_hash = YAML.load_file(file_name).to_h
           definitions.merge!(model_hash)
@@ -48,7 +44,7 @@ module Rspec
           definitions.merge!(response_hash)
         end
 
-        swagger_specification['definitions'] = definitions
+        specification['definitions'] = definitions
         definitions
       end
     end

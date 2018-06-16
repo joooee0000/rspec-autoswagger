@@ -1,13 +1,13 @@
 module Rspec
   module Autoswagger
-    module DocPart
+    module Parts
       class Path
         attr_reader :response, :request, :description, :example, :path, :response_name
 
-        def initialize(rspec_core, example, response_name)
-          @response = rspec_core.response
-          @request = rspec_core.request
-          @description = rspec_core.description
+        def initialize(rspec_core_obj, example, response_name)
+          @response = rspec_core_obj.response
+          @request = rspec_core_obj.request
+          @description = rspec_core_obj.description
           @example = example
           @response_name = response_name
         end
@@ -16,7 +16,7 @@ module Rspec
           example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2]
         end
 
-        def statsu
+        def status
           response.status
         end
 

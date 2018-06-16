@@ -6,5 +6,5 @@ RSpec.configuration.after(:each, autoswagger: true) do |example|
 end
 
 RSpec.configuration.after(:suite) do
-  Rspec::Autoswagger.doc_parts.aggregate
+  p Rspec::Autoswagger.doc_parts.aggregate
 end
