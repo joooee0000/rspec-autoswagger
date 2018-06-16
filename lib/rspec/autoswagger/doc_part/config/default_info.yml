@@ -1,0 +1,8 @@
+swagger: '2.0'
+info:
+  description: Doc Application For Project Api
+  version: 1.0.0
+  title: Project Api Doc
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
