@@ -59,12 +59,21 @@ module Rspec
           hash[path][method]["produces"] = ['application/json']
           hash[path][method]["responses"] = {}
           hash[path][method]["responses"][status] = {}
-          hash[path][method]["responses"][status]["description"] = "successful operation"
+          hash[path][method]["responses"][status]["description"] = response_description
           hash[path][method]["responses"][status]["schema"] = { "$ref" => "#/definitions/#{response_name}" }
           hash
         end
 
         private
+
+        def response_description
+          case status.to_i
+          when 200
+            'successful operation'
+          else
+            'error operation'
+          end
+        end
 
         def convert_value_to_type(value)
           if value.to_s == 'true' || value.to_s == 'false'

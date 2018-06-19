@@ -29,7 +29,7 @@ module Rspec
           model_hash = generate_model_definitions
           response_hash = generate_response_definitions
           response_hash.merge!(model_hash)
-          resonse_hash
+          response_hash
         end
 
         def generate_hash_and_file
