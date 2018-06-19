@@ -17,8 +17,23 @@ module Rspec
           DEFAULT_PATH
         end
 
-        def generate_file
-          SwaggerModel::SwaggerV2.create_from_json(
+        def generate_model_definitions
+          generate_hash_and_file['models']
+        end
+
+        def generate_response_definitions
+          generate_hash_and_file['responses']
+        end
+
+        def generate_definitions
+          model_hash = generate_model_definitions
+          response_hash = generate_response_definitions
+          response_hash.merge!(model_hash)
+          resonse_hash
+        end
+
+        def generate_hash_and_file
+          @definition_hash ||= SwaggerModel::SwaggerV2.create_from_json(
             json_string: json,
             tmp_file_path: tmp_file_path,
             response_name: response_name

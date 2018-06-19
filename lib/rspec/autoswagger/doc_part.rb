@@ -24,7 +24,7 @@ module Rspec
 
       def create_definition
         definition = Parts::Definition.new(rspec_core_obj.response.body, response_name)
-        definition.generate_file
+        definition.generate_definitions
       end
     end
   end

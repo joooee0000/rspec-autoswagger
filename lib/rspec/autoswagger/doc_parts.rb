@@ -13,39 +13,22 @@ module Rspec module Autoswagger
       def add(rspec_core_obj, example)
         doc_part = DocPart.new(rspec_core_obj, example)
         paths.merge!(doc_part.create_path)
-        doc_part.create_definition
+        definitions.merge!(doc_part.create_definition)
       end
 
       def aggregate
         specification.merge!(info)
-        specification.merge!({ paths: paths })
-        specification.merge!({ definitions: aggregate_definitions })
+        specification.merge!({ 'paths' => paths })
+        specification.merge!({ 'definitions' => definitions })
 
         specification
       end
 
       def to_yaml
         aggregate if specification.empty?
-        YAML.dump(specification, File.open(Rails.root.to_s + '/swagger/swagger.yml', 'w'))
-      end
 
-      private
-
-      def aggregate_definitions
-        model_file_names = Dir.glob(Parts::Definition::DEFAULT_PATH + "/Models/*")
-        response_file_names = Dir.glob(Parts::Definition::DEFAULT_PATH + "/Responses/*")
-        model_file_names.each do |file_name|
-          model_hash = YAML.load_file(file_name).to_h
-          definitions.merge!(model_hash)
-        end
-
-        responses = response_file_names.map do |file_name|
-          response_hash = YAML.load_file(file_name).to_h
-          definitions.merge!(response_hash)
-        end
-
-        specification['definitions'] = definitions
-        definitions
+        FileUtils::mkdir_p(Rails.root.to_s + '/tmp/')
+        YAML.dump(specification, File.open(Rails.root.to_s + '/tmp/swagger.yml', 'w'))
       end
     end
   end
