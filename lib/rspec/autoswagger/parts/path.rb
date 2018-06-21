@@ -13,7 +13,8 @@ module Rspec
         end
 
         def path
-          example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2]
+          path = example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2]
+          path.split("/").map { |name| name.include?(":") ? "{" + name.gsub(":", "") + "}" : name }.join("/")
         end
 
         def tags
@@ -29,17 +30,19 @@ module Rspec
         end
 
         def params
-          params = request.parameters
-          params.delete('controller')
-          params.delete('action')
-          params
+          return @params if @params.present?
+          @params = request.parameters.dup
+          @params.delete('controller')
+          @params.delete('action')
+          @params
         end
 
+        # TODO: 配列がstringになる問題
         def generate_parameters
           params.map do |name, value|
             {
               'name' => name,
-              'in' => 'path',
+              'in' => predict_param_type(name),
               'type' => convert_value_to_type(value)
             }
           end
@@ -47,8 +50,10 @@ module Rspec
 
         def generate_hash
           hash = {}
+          path_sym = path
           hash[path] = {}
           hash[path][method] = {}
+
           hash[path][method] = {}
           hash[path][method]["tags"] = tags
           hash[path][method]["summary"] = []
@@ -73,6 +78,12 @@ module Rspec
           else
             'error operation'
           end
+        end
+
+        def predict_param_type(param_name)
+          candidates = path.split("/").map { |name| name.gsub(/{|}/, "") }
+          return 'path' if candidates.include?(param_name.to_s)
+          method == 'get' ? 'query' : 'formData'
         end
 
         def convert_value_to_type(value)

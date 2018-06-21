@@ -12,7 +12,12 @@ module Rspec module Autoswagger
 
       def add(rspec_core_obj, example)
         doc_part = DocPart.new(rspec_core_obj, example)
-        paths.merge!(doc_part.create_path)
+        path = doc_part.create_path
+        if paths.keys.include?(path.keys.first)
+          paths[path.keys.first].merge!(path.values.first)
+        else
+          paths.merge!(doc_part.create_path)
+        end
         definitions.merge!(doc_part.create_definition)
       end
 

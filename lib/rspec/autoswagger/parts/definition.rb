@@ -18,7 +18,11 @@ module Rspec
         end
 
         def generate_model_definitions
-          generate_hash_and_file['models']
+          model_definition_hash = {}
+          generate_hash_and_file['models'].each do |key, value|
+            model_definition_hash.merge!(value)
+          end
+          model_definition_hash
         end
 
         def generate_response_definitions
