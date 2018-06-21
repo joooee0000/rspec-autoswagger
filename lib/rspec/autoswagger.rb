@@ -1,5 +1,5 @@
 require "rspec/autoswagger/version"
-require "rspec/autoswagger/rspec"
+require "rspec/autoswagger/rspec" if ENV["AUTOSWAGGER"]
 require "rspec/autoswagger/doc_parts"
 
 module Rspec
