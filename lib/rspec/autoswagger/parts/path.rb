@@ -37,14 +37,25 @@ module Rspec
           @params
         end
 
-        # TODO: 配列がstringになる問題
         def generate_parameters
           params.map do |name, value|
-            {
-              'name' => name,
-              'in' => predict_param_type(name),
-              'type' => convert_value_to_type(value)
-            }
+            type = convert_value_to_type(value)
+            if type == 'array'
+              type_hash = SwaggerModel::SwaggerV2.parse_array(value, "dummy", "dummy")
+              type_hash.delete('example')
+              {
+                'name' => name,
+                'in' => predict_param_type(name),
+                'type' => type,
+                'items' => type_hash
+              }
+            else
+              {
+                'name' => name,
+                'in' => predict_param_type(name),
+                'type' => type
+              }
+            end
           end
         end
 
@@ -93,6 +104,8 @@ module Rspec
             'string'
           elsif value.is_a?(Integer)
             'integer'
+          elsif value.is_a?(Array)
+            'array'
           else
             'string'
           end
