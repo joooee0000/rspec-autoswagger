@@ -29,6 +29,10 @@ module Rspec
           request.method.downcase
         end
 
+        def operation_id
+          (method + path.gsub('/', '_').gsub(/{|}/, '')).camelize
+        end
+
         def params
           return @params if @params.present?
           @params = request.parameters.dup
@@ -69,6 +73,7 @@ module Rspec
           hash[path][method]["tags"] = tags
           hash[path][method]["summary"] = []
           hash[path][method]["description"] = description
+          hash[path][method]["operationId"] = operation_id
 
           hash[path][method]["parameters"] = generate_parameters
 
