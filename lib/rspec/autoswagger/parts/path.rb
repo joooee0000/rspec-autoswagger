@@ -18,7 +18,10 @@ module Rspec
         end
 
         def tags
-          [request.parameters['controller']]
+          tag = request.parameters['controller']
+          base_path = Info.generate_hash['basePath']
+          tag = ('/' + tag).gsub(base_path.to_s, '')
+          [tag]
         end
 
         def status

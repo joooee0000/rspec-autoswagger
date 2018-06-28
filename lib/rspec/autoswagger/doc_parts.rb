@@ -4,7 +4,7 @@ module Rspec module Autoswagger
 
       attr_reader :specification, :info, :paths, :definitions
       def initialize
-        @info = Parts::Info.new.generate_hash
+        @info = Parts::Info.generate_hash
         @paths = {}
         @definitions = {}
         @specification = {}

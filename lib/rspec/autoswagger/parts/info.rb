@@ -5,7 +5,7 @@ module Rspec
 
         DEFAULT_INFO = YAML.load_file(File.expand_path("../config/default_info.yml", __FILE__))
 
-        def generate_hash
+        def self.generate_hash
           DEFAULT_INFO
         end
       end
