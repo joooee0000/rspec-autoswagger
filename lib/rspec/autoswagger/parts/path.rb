@@ -74,7 +74,7 @@ module Rspec
 
           hash[path][method] = {}
           hash[path][method]["tags"] = tags
-          hash[path][method]["summary"] = []
+          hash[path][method]["summary"] = ['']
           hash[path][method]["description"] = description
           hash[path][method]["operationId"] = operation_id
 
