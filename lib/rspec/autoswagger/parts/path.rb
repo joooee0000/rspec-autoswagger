@@ -44,22 +44,25 @@ module Rspec
         def generate_parameters
           params.map do |name, value|
             type = convert_value_to_type(value)
-            if type == 'array'
-              type_hash = SwaggerModel::SwaggerV2.parse_array(value, "dummy", "dummy")
-              type_hash.delete('example')
-              {
-                'name' => name,
-                'in' => predict_param_type(name),
-                'type' => type,
-                'items' => type_hash
-              }
-            else
-              {
-                'name' => name,
-                'in' => predict_param_type(name),
-                'type' => type
-              }
-            end
+            param_type = predict_param_type(name)
+            param_hash = if type == 'array'
+                           type_hash = SwaggerModel::SwaggerV2.parse_array(value, "dummy", "dummy")
+                           type_hash.delete('example')
+                           {
+                             'name' => name,
+                             'in' => param_type,
+                             'type' => type,
+                             'items' => type_hash
+                           }
+                         else
+                           {
+                             'name' => name,
+                             'in' => param_type,
+                             'type' => type
+                           }
+                         end
+            param_hash['required'] = true if param_hash['in'] == 'path'
+            param_hash
           end
         end
 
