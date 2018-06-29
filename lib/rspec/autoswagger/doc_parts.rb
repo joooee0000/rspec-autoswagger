@@ -12,13 +12,14 @@ module Rspec module Autoswagger
 
       def add(rspec_core_obj, example)
         doc_part = DocPart.new(rspec_core_obj, example)
-        path = doc_part.create_path
+        path, param_definitions = doc_part.create_path
         if paths.keys.include?(path.keys.first)
           paths[path.keys.first].merge!(path.values.first)
         else
           paths.merge!(path)
         end
         definitions.merge!(doc_part.create_definition)
+        definitions.merge!(param_definitions) unless param_definitions.empty?
       end
 
       def aggregate

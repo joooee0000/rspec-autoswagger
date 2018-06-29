@@ -36,6 +36,10 @@ module Rspec
           (method + path.gsub('/', '_').gsub(/{|}/, '')).camelize
         end
 
+        def param_model_name
+          (response_name + '_' + method + '_request_parameter').camelize
+        end
+
         def params
           return @params if @params.present?
           @params = request.parameters.dup
@@ -79,14 +83,17 @@ module Rspec
               params_arr << param_hash
             end
           end
+          param_definitions = {}
           unless schema.empty?
             params_arr << {
                              'name' => 'body',
                              'in' => 'body',
-                             'schema' => { 'type' => 'object', 'properties' => schema }
+                             'schema' => { "$ref" => "#/definitions/#{param_model_name}" }
                            }
+            param_definitions = { param_model_name => { 'type' => 'object', 'properties' => schema } }
           end
-          params_arr
+
+          [params_arr, param_definitions]
         end
 
         def generate_hash
@@ -101,14 +108,15 @@ module Rspec
           hash[path][method]["description"] = description
           hash[path][method]["operationId"] = operation_id
 
-          hash[path][method]["parameters"] = generate_parameters
+          params, param_definitions = generate_parameters
+          hash[path][method]["parameters"] = params
 
           hash[path][method]["produces"] = ['application/json']
           hash[path][method]["responses"] = {}
           hash[path][method]["responses"][status] = {}
           hash[path][method]["responses"][status]["description"] = response_description
           hash[path][method]["responses"][status]["schema"] = { "$ref" => "#/definitions/#{response_name}" }
-          hash
+          [hash, param_definitions]
         end
 
         private
