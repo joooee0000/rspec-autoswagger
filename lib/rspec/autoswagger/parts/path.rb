@@ -45,28 +45,48 @@ module Rspec
         end
 
         def generate_parameters
-          params.map do |name, value|
+          schema = {}
+          params_arr = []
+          params.each do |name, value|
             type = convert_value_to_type(value)
             param_type = predict_param_type(name)
-            param_hash = if type == 'array'
-                           type_hash = SwaggerModel::SwaggerV2.parse_array(value, "dummy", "dummy")
-                           type_hash.delete('example')
-                           {
-                             'name' => name,
-                             'in' => param_type,
-                             'type' => type,
-                             'items' => type_hash
-                           }
-                         else
-                           {
-                             'name' => name,
-                             'in' => param_type,
-                             'type' => type
-                           }
-                         end
-            param_hash['required'] = true if param_hash['in'] == 'path'
-            param_hash
+            if param_type == 'body'
+              if type == 'array'
+                type_hash = SwaggerModel::SwaggerV2.parse_array(value, "dummy", "dummy")
+                type_hash.delete('example')
+                schema.merge!({ name => { 'type' => type, 'items' => type_hash } })
+              else
+                schema.merge!({ name => { 'type' => type } })
+              end
+            else
+              if type == 'array'
+                type_hash = SwaggerModel::SwaggerV2.parse_array(value, "dummy", "dummy")
+                type_hash.delete('example')
+                param_hash = {
+                  'name' => name,
+                  'in' => param_type,
+                  'type' => type,
+                  'items' => type_hash
+                }
+              else
+                param_hash = {
+                  'name' => name,
+                  'in' => param_type,
+                  'type' => type
+                }
+              end
+              param_hash['required'] = true if param_type == 'path'
+              params_arr << param_hash
+            end
           end
+          unless schema.empty?
+            params_arr << {
+                             'name' => 'body',
+                             'in' => 'body',
+                             'schema' => { 'type' => 'object', 'properties' => schema }
+                           }
+          end
+          params_arr
         end
 
         def generate_hash
@@ -105,7 +125,7 @@ module Rspec
         def predict_param_type(param_name)
           candidates = path.split("/").map { |name| name.gsub(/{|}/, "") }
           return 'path' if candidates.include?(param_name.to_s)
-          method == 'get' ? 'query' : 'formData'
+          method == 'get' ? 'query' : 'body'
         end
 
         def convert_value_to_type(value)

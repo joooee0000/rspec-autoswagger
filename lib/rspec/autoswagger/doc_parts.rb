@@ -16,7 +16,7 @@ module Rspec module Autoswagger
         if paths.keys.include?(path.keys.first)
           paths[path.keys.first].merge!(path.values.first)
         else
-          paths.merge!(doc_part.create_path)
+          paths.merge!(path)
         end
         definitions.merge!(doc_part.create_definition)
       end
