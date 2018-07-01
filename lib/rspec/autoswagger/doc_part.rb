@@ -14,7 +14,7 @@ module Rspec
       end
 
       def response_name
-        example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2].gsub(/\/|:/, '')
+        example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2].gsub(/\/|:/, '').camelize
       end
 
       def create_path
