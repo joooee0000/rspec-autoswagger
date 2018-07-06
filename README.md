@@ -25,7 +25,7 @@ Or install it yourself as:
 ```
 # spec/requests/book_spec.rb
 describe "Books" do
-  describe "POST /Books", autodoc: true do
+  describe "POST /books", autoswagger: true do
     let(:description) { 'Create New Book' }
     it "create a new book" do
       post "/books", name: "little bear", type: 1
