@@ -22,7 +22,22 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+# spec/requests/book_spec.rb
+describe "Books" do
+  describe "POST /books", autoswagger: true do
+    let(:description) { 'Create New Book' }
+    it "create a new book" do
+      post "/books", name: "little bear", type: 1
+      expect(response.status).to eq 200
+    end
+  end
+end
+```
+
+```
+AUTOSWAGGER=1 bundle exec rspec
+```
 
 ## Development
 
