@@ -1,13 +1,22 @@
 require 'rspec/autoswagger/doc_part'
-module Rspec module Autoswagger
+module Rspec
+  module Autoswagger
     class DocParts
 
       attr_reader :specification, :info, :paths, :definitions
+      attr_accessor :output_path
+
+      DEFAULT_OUTPUT_PATH = './tmp'
+
       def initialize
         @info = Parts::Info.generate_hash
         @paths = {}
         @definitions = {}
         @specification = {}
+      end
+
+      def output_path
+        @output_path || DEFAULT_OUTPUT_PATH
       end
 
       def add(rspec_core_obj, example)
@@ -18,7 +27,7 @@ module Rspec module Autoswagger
         else
           paths.merge!(path)
         end
-        definitions.merge!(doc_part.create_definition)
+        definitions.merge!(doc_part.create_definition(output_path))
         definitions.merge!(param_definitions) unless param_definitions.empty?
       end
 
@@ -32,10 +41,10 @@ module Rspec module Autoswagger
 
       def to_yaml
         aggregate if specification.empty?
-
-        FileUtils::mkdir_p(Rails.root.to_s + '/tmp/')
-        YAML.dump(specification, File.open(Rails.root.to_s + '/tmp/swagger.yml', 'w'))
+        FileUtils::mkdir_p(output_path)
+        YAML.dump(specification, File.open(output_path + '/swagger.yml', 'w'))
       end
+
     end
   end
 end

@@ -22,8 +22,8 @@ module Rspec
         path.generate_hash
       end
 
-      def create_definition
-        definition = Parts::Definition.new(rspec_core_obj.response.body, response_name)
+      def create_definition(output_path = nil)
+        definition = Parts::Definition.new(rspec_core_obj.response.body, response_name, output_path)
         definition.generate_definitions
       end
     end
