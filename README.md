@@ -43,6 +43,14 @@ describe "Books" do
 end
 ```
 
+Execute the command, then the result files will be generated at the location you specified.
+When you execute rspec without AUTOSWAGGER=1, this gem doesn't do anything.
+
+```
+# shell-command
+AUTOSWAGGER=1 rspec
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
