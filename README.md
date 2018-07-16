@@ -21,17 +21,18 @@ Or install it yourself as:
     $ gem install rspec-autoswagger
 
 ## Usage
-Set the location path where result files to output.
+Set the location path where the result files to output.
+
 Example of Rails below.
 
-```
+```ruby
 config/initializers/rspec_autoswagger.rb
 Rspec::Autoswagger.doc_parts.output_path = Rails.root.to_s + '/tmp/autoswagger'
 ```
 
 Write Rspec as an example below.
 
-```
+```ruby
 # spec/requests/book_spec.rb
 describe "Books" do
   describe "POST /books", autoswagger: true do
