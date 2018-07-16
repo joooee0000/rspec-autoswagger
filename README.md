@@ -21,6 +21,15 @@ Or install it yourself as:
     $ gem install rspec-autoswagger
 
 ## Usage
+Set the location path where result files to output.
+Example of Rails below.
+
+```
+config/initializers/rspec_autoswagger.rb
+Rspec::Autoswagger.doc_parts.output_path = Rails.root.to_s + '/tmp/autoswagger'
+```
+
+Write Rspec as an example below.
 
 ```
 # spec/requests/book_spec.rb
@@ -33,10 +42,6 @@ describe "Books" do
     end
   end
 end
-```
-
-```
-AUTOSWAGGER=1 bundle exec rspec
 ```
 
 ## Development
