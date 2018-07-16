@@ -26,7 +26,7 @@ Set the location path where the result files to output.
 Example of Rails below.
 
 ```ruby
-config/initializers/rspec_autoswagger.rb
+# config/initializers/rspec_autoswagger.rb
 Rspec::Autoswagger.doc_parts.output_path = Rails.root.to_s + '/tmp/autoswagger'
 ```
 
