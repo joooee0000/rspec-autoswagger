@@ -1,8 +1,6 @@
 # Rspec::Autoswagger
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rspec/autoswagger`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Generate Swagger Specification file automatically by running your rspec.
 
 ## Installation
 
@@ -21,8 +19,18 @@ Or install it yourself as:
     $ gem install rspec-autoswagger
 
 ## Usage
+Set the location path where the result files to output.
 
+Example of Rails below.
+
+```ruby
+# config/initializers/rspec_autoswagger.rb
+Rspec::Autoswagger.doc_parts.output_path = Rails.root.to_s + '/tmp/autoswagger'
 ```
+
+Write Rspec as an example below.
+
+```ruby
 # spec/requests/book_spec.rb
 describe "Books" do
   describe "POST /books", autoswagger: true do
@@ -35,8 +43,12 @@ describe "Books" do
 end
 ```
 
+Execute the command, then the result files will be generated at the location you specified.
+When you execute rspec without AUTOSWAGGER=1, this gem doesn't do anything.
+
 ```
-AUTOSWAGGER=1 bundle exec rspec
+# shell-command
+AUTOSWAGGER=1 rspec
 ```
 
 ## Development
