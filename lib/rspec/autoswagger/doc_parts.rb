@@ -22,8 +22,16 @@ module Rspec
       def add(rspec_core_obj, example)
         doc_part = DocPart.new(rspec_core_obj, example)
         path, param_definitions = doc_part.create_path
-        if paths.keys.include?(path.keys.first)
-          paths[path.keys.first].merge!(path.values.first)
+        method = path.values.first.keys.first
+        endpoint = path.keys.first
+        if paths.keys.include?(endpoint)
+          if paths[endpoint].keys.include?(method)
+            paths.each do |key, value|
+              value[method]['responses'].merge!(path.values.first[method]['responses']) if key.to_s == endpoint.to_s
+            end
+          else
+            paths[endpoint].merge!(path.values.first)
+          end
         else
           paths.merge!(path)
         end

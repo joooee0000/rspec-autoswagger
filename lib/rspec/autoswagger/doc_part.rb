@@ -14,7 +14,12 @@ module Rspec
       end
 
       def response_name
-        example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2].gsub(/\/|:/, '').camelize
+        status = rspec_core_obj.response.status.to_s
+        if status == '200'
+          example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2].gsub(/\/|:/, '').camelize
+        else
+          example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2].gsub(/\/|:/, '').camelize + '_' + status
+        end
       end
 
       def create_path
