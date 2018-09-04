@@ -7,7 +7,12 @@ module Rspec
         def initialize(rspec_core_obj, example, response_name)
           @response = rspec_core_obj.response
           @request = rspec_core_obj.request
-          @description = rspec_core_obj.description
+          begin
+            @description = rspec_core_obj.description
+          rescue RSpec::Core::ExampleGroup::WrongScopeError
+            puts "[AUTOSWAGGER WARNING] please write description"
+            @description = ''
+          end
           @example = example
           @response_name = response_name
         end
@@ -106,7 +111,6 @@ module Rspec
           hash[path][method]["tags"] = tags
           hash[path][method]["summary"] = ''
           hash[path][method]["description"] = description
-          hash[path][method]["operationId"] = operation_id
 
           params, param_definitions = generate_parameters
           hash[path][method]["parameters"] = params
