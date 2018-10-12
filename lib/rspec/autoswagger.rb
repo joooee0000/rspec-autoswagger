@@ -5,6 +5,8 @@ require "rspec/autoswagger/doc_parts"
 module Rspec
   module Autoswagger
 
+    API_BASE_PATH = '/api/v1'
+
     def self.doc_parts
       @doc_parts ||= DocParts.new
     end

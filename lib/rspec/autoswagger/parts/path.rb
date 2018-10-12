@@ -1,3 +1,5 @@
+require 'rspec/autoswagger/util'
+
 module Rspec
   module Autoswagger
     module Parts
@@ -10,7 +12,6 @@ module Rspec
           begin
             @description = rspec_core_obj.description
           rescue RSpec::Core::ExampleGroup::WrongScopeError
-            puts "[AUTOSWAGGER WARNING] please write description"
             @description = ''
           end
           @example = example
@@ -19,7 +20,24 @@ module Rspec
 
         def path
           path = example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2]
-          path.split("/").map { |name| name.include?(":") ? "{" + name.gsub(":", "") + "}" : name }.join("/")
+          if path.blank?
+            path = request.path.gsub(Rspec::Autoswagger::API_BASE_PATH, '')
+            get_converted_path(path)
+          else
+            path.split("/").map { |name| name.include?(":") ? "{" + name.gsub(":", "") + "}" : name }.join("/")
+          end
+        end
+
+        def get_converted_path(path)
+          path.split("/").map do |path_element|
+            if Util.detect_uuid(path_element)
+              "{id}"
+            elsif Util.detect_uuid(path_element)
+              "{id}"
+            else
+              path_element
+            end
+          end.join("/")
         end
 
         def tags
