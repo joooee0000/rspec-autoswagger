@@ -79,6 +79,7 @@ module Rspec
             param_type = predict_param_type(name)
             if param_type == 'body'
               if type == 'array'
+                value = value.map { |v| v.to_h } if value.first.class.to_s == 'ActiveSupport::HashWithIndifferentAccess'
                 type_hash = SwaggerModel::SwaggerV2.parse_array(value, "dummy", "dummy")
                 type_hash.delete('example')
                 schema.merge!({ name => { 'type' => type, 'items' => type_hash } })
@@ -87,6 +88,7 @@ module Rspec
               end
             else
               if type == 'array'
+                value = value.map { |v| v.to_h } if value.first.class.to_s == 'ActiveSupport::HashWithIndifferentAccess'
                 type_hash = SwaggerModel::SwaggerV2.parse_array(value, "dummy", "dummy")
                 type_hash.delete('example')
                 param_hash = {
