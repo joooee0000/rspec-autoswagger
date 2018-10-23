@@ -19,17 +19,17 @@ module Rspec
         status = rspec_core_obj.response.status.to_s
         if status == '200'
           path = example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2]
-          path = if path.blank?
-                   path = request.path.gsub(Rspec::Autoswagger::API_BASE_PATH, '')
-                   get_converted_path(path)
-                 end
+          if path.blank?
+            path = request.path.gsub(Rspec::Autoswagger::API_BASE_PATH, '')
+            path = get_converted_path(path)
+          end
           path.gsub(/\/|:/, '').camelize
         else
           path = example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2]
-          path = if path.blank?
-                   path = request.path.gsub(Rspec::Autoswagger::API_BASE_PATH, '')
-                   get_converted_path(path)
-                 end
+          if path.blank?
+            path = request.path.gsub(Rspec::Autoswagger::API_BASE_PATH, '')
+            path = get_converted_path(path)
+          end
           path.gsub(/\/|:/, '').camelize + '_' + status
         end
       end
