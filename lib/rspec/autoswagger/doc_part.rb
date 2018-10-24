@@ -23,14 +23,22 @@ module Rspec
             path = request.path.gsub(Rspec::Autoswagger::API_BASE_PATH, '')
             path = get_converted_path(path)
           end
-          path.gsub(/\/|:/, '').camelize
+          if request.method == "GET"
+            path.gsub(/\/|:/, '').camelize
+          else
+            path.gsub(/\/|:/, '').camelize + request.method.camelize
+          end
         else
           path = example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2]
           if path.blank?
             path = request.path.gsub(Rspec::Autoswagger::API_BASE_PATH, '')
             path = get_converted_path(path)
           end
-          path.gsub(/\/|:/, '').camelize + '_' + status
+          if request.method == "GET"
+            path.gsub(/\/|:/, '').camelize + status
+          else
+            path.gsub(/\/|:/, '').camelize + status + request.method.camelize
+          end
         end
       end
 
