@@ -26,7 +26,7 @@ module Rspec
           if request.method == "GET"
             path.gsub(/\/|:/, '').camelize
           else
-            path.gsub(/\/|:/, '').camelize + request.method.camelize
+            path.gsub(/\/|:/, '').camelize + request.method.downcase.camelize
           end
         else
           path = example.full_description[%r<(GET|POST|PATCH|PUT|DELETE) ([^ ]+)>, 2]
@@ -37,7 +37,7 @@ module Rspec
           if request.method == "GET"
             path.gsub(/\/|:/, '').camelize + status
           else
-            path.gsub(/\/|:/, '').camelize + status + request.method.camelize
+            path.gsub(/\/|:/, '').camelize + status + request.method.downcase.camelize
           end
         end
       end

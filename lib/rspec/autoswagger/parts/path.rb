@@ -60,7 +60,7 @@ module Rspec
         end
 
         def param_model_name
-          (response_name + '_' + method + '_request_parameter').camelize
+          (response_name + '_request_parameter').camelize
         end
 
         def params
