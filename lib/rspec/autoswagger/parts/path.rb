@@ -97,6 +97,16 @@ module Rspec
                   'type' => type,
                   'items' => type_hash
                 }
+              elsif type == 'hash'
+                value.each do |n, v|
+                  type = convert_value_to_type(v)
+                  param_hash = {
+                    'name' => "#{name}\[#{n}\]",
+                    'in' => param_type,
+                    'type' => type
+                  }
+                  params_arr << param_hash
+                end
               else
                 param_hash = {
                   'name' => name,
@@ -107,6 +117,7 @@ module Rspec
               param_hash['required'] = true if param_type == 'path'
               params_arr << param_hash
             end
+            params_arr = params_arr.uniq
           end
           param_definitions = {}
           unless schema.empty?
@@ -169,6 +180,8 @@ module Rspec
             'integer'
           elsif value.is_a?(Array)
             'array'
+          elsif value.is_a?(Hash)
+            'hash'
           else
             'string'
           end
